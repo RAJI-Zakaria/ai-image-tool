@@ -1,3 +1,25 @@
+## Routing in Next.js (App Directory)
+
+Next.js provides a robust system to manage routes with different layouts using the new app routing system introduced in Next.js 13. Here are some key features and concepts:
+
+### File-based Routing
+
+- Automatic Route Generation: Next.js generates routes based on the folder structure in the app directory.
+- Each folder represents a route segment. For example, app/about/page.js will create the route /about.
+
+### Group Routing
+
+- Grouping Routes: You can create route groups by using parenthesis in folder names, such as (auth) or (root). The (root) folder is the default group.
+- Different Layouts: This technique allows you to apply different layouts for various sections of your application. For example:
+  - Login Page: May have no navigation.
+  - Home Page: May include a top navigation bar.
+  - Dashboard: May feature a side navigation menu.
+- Example: Placing the layout.js file in the (auth) folder will apply that layout to all routes inside (auth).
+
+### Dynamic Routing
+
+- Dynamic Routes: Routes like /users/[id]/edit allow you to capture URL parameters dynamically. For example, [id] in the URL can be used to fetch and display data specific to the user with that ID.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
