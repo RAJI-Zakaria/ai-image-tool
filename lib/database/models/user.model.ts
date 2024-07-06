@@ -22,7 +22,7 @@ interface IUser extends Document {
   firstName: string;
   lastName: string;
   planId: string;
-  creditBalance: number;
+  creditBalance?: number;
   createdAt: Date;
   updatedAt: Date;
 }
