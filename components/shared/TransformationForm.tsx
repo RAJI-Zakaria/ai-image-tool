@@ -96,6 +96,9 @@ const TransformationForm = ({
         prompt: values.prompt,
         color: values.color,
       };
+      console.log({
+        imageData,
+      });
 
       if (action === "Add") {
         try {
@@ -189,9 +192,9 @@ const TransformationForm = ({
         <CustomField
           control={form.control}
           name="title"
-          formLabel="Image"
+          formLabel="Image Title"
           className="w-full"
-          render={(field) => <Input {...field} className="input-field" />}
+          render={({ field }) => <Input {...field} className="input-field" />}
         />
         {type === "fill" && (
           <CustomField
