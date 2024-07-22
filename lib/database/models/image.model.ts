@@ -18,7 +18,7 @@ const ImageSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-interface IImage extends Document {
+export interface IImage extends Document {
   // 'Document' is a mongoose type (Ex of extended properties _id)
   title: string;
   transformationType: string;
