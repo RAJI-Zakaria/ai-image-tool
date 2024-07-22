@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   aspectRatioOptions,
+  creditFee,
   defaultValues,
   transformationTypes,
 } from "@/constants";
@@ -30,6 +31,7 @@ import { updateCredits } from "@/lib/actions/user.action";
 import { getCldImageUrl } from "next-cloudinary";
 import { addImage, updateImage } from "@/lib/actions/image.action";
 import { useRouter } from "next/navigation";
+import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
 
 export const formSchema = z.object({
   title: z.string(),
@@ -47,6 +49,14 @@ const TransformationForm = ({
   creditBalance,
   config = null,
 }: TransformationFormProps) => {
+  console.log({
+    action,
+    data,
+    userId,
+    type,
+    creditBalance,
+    config,
+  });
   const transformationType = transformationTypes[type];
   const [image, setImage] = useState(data);
   const [newTransformation, setNewTransformation] =
@@ -89,16 +99,13 @@ const TransformationForm = ({
         transformationType: type,
         width: image?.width,
         height: image?.height,
-        secureURL: image?.secureUrl,
+        secureURL: image?.secureURL,
         transformationURL: transformationURL,
         config: transformationConfig,
         aspectRatio: values.aspectRatio,
         prompt: values.prompt,
         color: values.color,
       };
-      console.log({
-        imageData,
-      });
 
       if (action === "Add") {
         try {
@@ -111,10 +118,10 @@ const TransformationForm = ({
           if (newImage) {
             form.reset();
             setImage(data);
-            router.push("/transformations/${newImage._id}");
+            router.push(`/transformations/${newImage._id}`);
           }
-        } catch (e) {
-          console.log(e);
+        } catch (error) {
+          console.log(error);
         }
       }
 
@@ -175,20 +182,36 @@ const TransformationForm = ({
     }, 1000);
   };
 
-  // TODO: Update creditFee to be dynamic
   const onTransformHandler = async () => {
     setIsTransforming(true);
+
     setTransformationConfig(
       deepMergeObjects(newTransformation, transformationConfig)
     );
+
     setNewTransformation(null);
+
     startTransition(async () => {
-      await updateCredits(userId, -1);
+      await updateCredits(userId, creditFee);
     });
   };
+
+  useEffect(() => {
+    if (image && (type === "restore" || type === "removeBackground")) {
+      console.log({
+        transformationType___config: transformationType.config,
+      });
+      setNewTransformation(transformationType.config);
+    }
+  }, [image, transformationType.config, type]);
+
   return (
     <Form {...form}>
+      {type}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {creditBalance && creditBalance < Math.abs(creditFee) && (
+          <InsufficientCreditsModal />
+        )}
         <CustomField
           control={form.control}
           name="title"
