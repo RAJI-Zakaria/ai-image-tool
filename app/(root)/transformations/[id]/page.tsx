@@ -82,7 +82,6 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
             hasDownload={true}
           />
         </div>
-
         {userId === image.author.clerkId && (
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">

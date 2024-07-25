@@ -137,7 +137,7 @@ const TransformationForm = ({
           });
 
           if (updatedImage) {
-            router.push("/transformations/${updatedImage._id}");
+            router.push(`/transformations/${updatedImage._id}`);
           }
         } catch (e) {
           console.log(e);
@@ -177,9 +177,8 @@ const TransformationForm = ({
           [fieldName === "prompt" ? "prompt" : "to"]: value,
         },
       }));
-
-      return onChangeField(value);
     }, 1000);
+    return onChangeField(value);
   };
 
   const onTransformHandler = async () => {
@@ -207,7 +206,6 @@ const TransformationForm = ({
 
   return (
     <Form {...form}>
-      {type}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {creditBalance && creditBalance < Math.abs(creditFee) && (
           <InsufficientCreditsModal />
